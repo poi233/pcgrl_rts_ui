@@ -1,0 +1,35 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <link rel="stylesheet" href="{% static 'brush/style.css' %}">
+</head>
+<body>
+<div class="main">
+    <ul>
+        <li>
+            <button class="base">base</button>
+            <button class="resource">resource</button>
+            <button class="chock_point">chock point</button>
+        </li>
+        <li>
+            <button class="small">small</button>
+            <button class="medium">medium</button>
+            <button class="large">large</button>
+        </li>
+        <li>
+            <button class="clean">clean</button>
+{#            <button class="random">random</button>#}
+            <button class="show">show</button>
+        </li>
+
+    </ul>
+    <canvas width="500" height="500"></canvas>
+    <p class="res"></p>
+</div>
+<script src="https://cdn.bootcss.com/downloadjs/1.4.7/download.min.js"></script>
+<script src="{% static 'brush/main.js' %}"></script>
+</body>
+</html>

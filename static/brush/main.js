@@ -9,7 +9,7 @@ function run(canvas, obj) {
     this.bgWidthLength = 8
     this.bgHeightLength = 8
     this.clickedArr = []
-    this.currentBrush = 3;
+    this.currentBrush = 2;
     this.start(this.bgWidthLength);
     this.click();
     return this
@@ -116,9 +116,9 @@ run.prototype.showRes = function () {
         heatMap.push(row)
     }
     let res = "";
-    for (let i = 0; i < this.clickedArr.length; i++){
+    for (let i = 0; i < this.clickedArr.length; i++) {
         o = this.clickedArr[i];
-        res += o["point"].x + " " + o["point"].y + " " + o["type"] + "|| ";
+        res += o["point"].x + "," + o["point"].y + "," + o["type"] + "|";
     }
     return res;
 }
@@ -170,58 +170,42 @@ let canvas = document.querySelector(".main canvas")
 let cvs = canvas.getContext("2d")
 let a = new run(canvas)
 
-let clean = document.querySelector(".clean");
-let show = document.querySelector(".show");
-let small = document.querySelector(".small");
-let medium = document.querySelector(".medium");
-let large = document.querySelector(".large");
-let base = document.querySelector(".base");
-let resource = document.querySelector(".resource");
-let chock_point = document.querySelector(".chock_point");
+$('#small').on('click', function () {
+    a.clean();
+    a.cleanAll();
+    a.start(8);
+});
 
+$('#medium').on('click', function () {
+    a.clean();
+    a.cleanAll();
+    a.start(12);
+});
 
-clean.onclick = function () {
-    a.clean()
-};
-
-show.onclick = function() {
-    let res = document.querySelector(".res");
-    res.innerHTML = a.showRes()
-}
-
-// down.onclick = function () {
-//     show(canvas.toDataURL(), 'test.png', 'image/png')
-// }
-
-small.onclick = function () {
-    a.clean()
-    a.cleanAll()
-    a.start(8)
-}
-
-medium.onclick = function () {
-    a.clean()
-    a.cleanAll()
-    a.start(12)
-}
-
-large.onclick = function () {
-    a.clean()
-    a.cleanAll()
-    a.start(16)
-}
-
-base.onclick = function () {
-    a.currentBrush = 1;
+$('#large').on('click', function () {
+    a.clean();
+    a.cleanAll();
+    a.start(16);
+});
+$("#base").on('click', function () {
+    a.currentBrush = 0;
     a.changeClickColor("#00ff00")
-}
-resource.onclick = function () {
-    a.currentBrush = 2
+});
+
+$("#resource").on('click', function () {
+    a.currentBrush = 1;
     a.changeClickColor("#0000ff")
-}
-chock_point.onclick = function () {
-    a.currentBrush = 3;
+});
+
+$("#obstacle").on('click', function () {
+    a.currentBrush = 2;
     a.changeClickColor("#ff0000")
-}
+});
 
+$("#clean").on('click', function () {
+    a.clean()
+});
 
+$("#show").on('click', function () {
+    $("#res").text(a.showRes());
+});

@@ -4,32 +4,102 @@
 <head>
     <meta charset="UTF-8">
     <title>Document</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"
+            integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+            crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+            integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+            crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+            integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+            crossorigin="anonymous"></script>
     <link rel="stylesheet" href="{% static 'brush/style.css' %}">
 </head>
 <body>
 <div class="main">
-    <ul>
-        <li>
-            <button class="base">base</button>
-            <button class="resource">resource</button>
-            <button class="chock_point">chock point</button>
-        </li>
-        <li>
-            <button class="small">small</button>
-            <button class="medium">medium</button>
-            <button class="large">large</button>
-        </li>
-        <li>
-            <button class="clean">clean</button>
-{#            <button class="random">random</button>#}
-            <button class="show">show</button>
-        </li>
-
-    </ul>
-    <canvas width="500" height="500"></canvas>
-    <p class="res"></p>
+    <div id="toolbar" style="margin-bottom: 20px;">
+        <div class="btn-group btn-group-toggle" data-toggle="buttons">
+            <label class="btn btn-secondary active">
+                <input type="radio" name="tile" id="base" value="0"> Base
+            </label>
+            <label class="btn btn-secondary">
+                <input type="radio" name="tile" id="resource" value="1"> Resource
+            </label>
+            <label class="btn btn-secondary">
+                <input type="radio" name="tile" id="obstacle" value="2" checked="checked"> Obstacle
+            </label>
+        </div>
+        <div id="size-selector" class="btn-group btn-group-toggle" data-toggle="buttons">
+            <label class="btn btn-secondary active">
+                <input type="radio" name="size" id="small" value="0" checked="checked"> Small
+            </label>
+            <label class="btn btn-secondary">
+                <input type="radio" name="size" id="medium" value="1"> Medium
+            </label>
+            <label class="btn btn-secondary">
+                <input type="radio" name="size" id="large" value="2"> Large
+            </label>
+        </div>
+        <div id="style-selector" class="btn-group btn-group-toggle" data-toggle="buttons">
+            <label class="btn btn-secondary active">
+                <input type="radio" name="style" id="fair" value="0" checked="checked"> Fair
+            </label>
+            <label class="btn btn-secondary">
+                <input type="radio" name="style" id="fun" value="1"> Fun
+            </label>
+        </div>
+        <button class="btn btn-primary" id="clean">clean</button>
+        <button class="btn btn-primary" id="show">show</button>
+        <button class="btn btn-success" id="suggestion">suggestion</button>
+    </div>
+    <div id="canvas">
+        <canvas width="500" height="500" id="canvas"></canvas>
+    </div>
+    <div>
+        <p id="res"></p>
+    </div>
 </div>
 <script src="https://cdn.bootcss.com/downloadjs/1.4.7/download.min.js"></script>
 <script src="{% static 'brush/main.js' %}"></script>
+<script>
+    var csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
+
+    function csrfSafeMethod(method) {
+        // these HTTP methods do not require CSRF protection
+        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+    }
+
+    $.ajaxSetup({
+        beforeSend: function (xhr, settings) {
+            // if not safe, set csrftoken
+            if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+            }
+        }
+    });
+
+    $("#suggestion").on('click', function () {
+        var size = $("input[name='size']:checked").val();
+        var style = $("input[name='style']:checked").val();
+        var tiles = a.showRes();
+        var data = {"size": size, "style": style, "tiles": tiles};
+        $.ajax({
+            type: "POST",
+            url: "{% url 'brush:suggest' %}",
+            data: data,
+            dataType: "json",
+            success: function (message) {
+                alert("提交成功" + JSON.stringify(message));
+            },
+            error: function (message) {
+                alert("提交失败" + JSON.stringify(message));
+            }
+        });
+    });
+
+
+</script>
 </body>
 </html>

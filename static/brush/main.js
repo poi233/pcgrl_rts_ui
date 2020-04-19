@@ -188,17 +188,17 @@ $('#large').on('click', function () {
     a.start(16);
 });
 $("#base").on('click', function () {
-    a.currentBrush = 0;
+    a.currentBrush = 1;
     a.changeClickColor("#00ff00")
 });
 
 $("#resource").on('click', function () {
-    a.currentBrush = 1;
+    a.currentBrush = 2;
     a.changeClickColor("#0000ff")
 });
 
 $("#obstacle").on('click', function () {
-    a.currentBrush = 2;
+    a.currentBrush = 3;
     a.changeClickColor("#ff0000")
 });
 

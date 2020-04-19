@@ -22,40 +22,52 @@
     <div id="toolbar" style="margin-bottom: 20px;">
         <div class="btn-group btn-group-toggle" data-toggle="buttons">
             <label class="btn btn-secondary active">
-                <input type="radio" name="tile" id="base" value="0"> Base
+                <input type="radio" name="tile" id="base" value="base"> Base
             </label>
             <label class="btn btn-secondary">
-                <input type="radio" name="tile" id="resource" value="1"> Resource
+                <input type="radio" name="tile" id="resource" value="resource"> Resource
             </label>
             <label class="btn btn-secondary">
-                <input type="radio" name="tile" id="obstacle" value="2" checked="checked"> Obstacle
+                <input type="radio" name="tile" id="obstacle" value="obstacle" checked="checked"> Obstacle
             </label>
         </div>
         <div id="size-selector" class="btn-group btn-group-toggle" data-toggle="buttons">
             <label class="btn btn-secondary active">
-                <input type="radio" name="size" id="small" value="0" checked="checked"> Small
+                <input type="radio" name="size" id="small" value="small" checked="checked"> Small
             </label>
             <label class="btn btn-secondary">
-                <input type="radio" name="size" id="medium" value="1"> Medium
+                <input type="radio" name="size" id="medium" value="medium"> Medium
             </label>
             <label class="btn btn-secondary">
-                <input type="radio" name="size" id="large" value="2"> Large
+                <input type="radio" name="size" id="large" value="large"> Large
             </label>
         </div>
         <div id="style-selector" class="btn-group btn-group-toggle" data-toggle="buttons">
             <label class="btn btn-secondary active">
-                <input type="radio" name="style" id="fair" value="0" checked="checked"> Fair
+                <input type="radio" name="style" id="fair" value="fair" checked="checked"> Fair
             </label>
             <label class="btn btn-secondary">
-                <input type="radio" name="style" id="fun" value="1"> Fun
+                <input type="radio" name="style" id="fun" value="fun"> Fun
             </label>
         </div>
-        <button class="btn btn-primary" id="clean">clean</button>
-        <button class="btn btn-primary" id="show">show</button>
-        <button class="btn btn-success" id="suggestion">suggestion</button>
+        <div id="rep-selector" class="btn-group btn-group-toggle" data-toggle="buttons">
+            <label class="btn btn-secondary active">
+                <input type="radio" name="rep" id="narrow" value="narrow" checked="checked"> Narrow
+            </label>
+            <label class="btn btn-secondary">
+                <input type="radio" name="rep" id="turtle" value="turtle"> Turtle
+            </label>
+            <label class="btn btn-secondary">
+                <input type="radio" name="rep" id="wide" value="wide"> Wide
+            </label>
+        </div>
+
+        <button class="btn btn-primary" id="clean">Clean</button>
+        <button class="btn btn-primary" id="show">Show</button>
+        <button class="btn btn-success" id="suggestion">Suggestion</button>
     </div>
     <div id="canvas">
-        <canvas width="500" height="500" id="canvas"></canvas>
+        <canvas width="450" height="450" id="canvas"></canvas>
     </div>
     <div>
         <p id="res"></p>
@@ -83,8 +95,9 @@
     $("#suggestion").on('click', function () {
         var size = $("input[name='size']:checked").val();
         var style = $("input[name='style']:checked").val();
+        var rep = $("input[name='rep']:checked").val();
         var tiles = a.showRes();
-        var data = {"size": size, "style": style, "tiles": tiles};
+        var data = {"size": size, "style": style, "tiles": tiles, "rep": rep};
         $.ajax({
             type: "POST",
             url: "{% url 'brush:suggest' %}",

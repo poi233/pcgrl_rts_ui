@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
+from stable_baselines import PPO2
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -117,6 +118,14 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
+
+SMALL_FAIR_NARROW = PPO2.load("static/models/small_fair_rts/narrow/model_1.pkl")
+# SMALL_FAIR_TURTLE = PPO2.load("static/models/small_fair_rts/turtle/model_1.pkl")
+# SMALL_FAIR_WIDE = PPO2.load("static/models/small_fair_rts/wide/model_1.pkl")
+#
+# SMALL_FUN_NARROW = PPO2.load("static/models/small_fun_rts/narrow/model_1.pkl")
+# SMALL_FUN_TURTLE = PPO2.load("static/models/small_fun_rts/turtle/model_1.pkl")
+# SMALL_FUN_WIDE = PPO2.load("static/models/small_fun_rts/wide/model_1.pkl")
 
 STATIC_URL = '/static/'
 

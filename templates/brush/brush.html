@@ -65,9 +65,16 @@
         <button class="btn btn-primary" id="clean">Clean</button>
         <button class="btn btn-primary" id="show">Show</button>
         <button class="btn btn-success" id="suggestion">Suggestion</button>
+
+        <div id="loading-spin" class="spinner-border text-primary" role="status" style="visibility: hidden; margin-left: 5px;">
+            <span class="sr-only">Loading...</span>
+        </div>
+
     </div>
-    <div id="canvas">
-        <canvas width="450" height="450" id="canvas"></canvas>
+    <div>
+        <canvas width="450" height="450" id="canvas" style="display: inline;"></canvas>
+        <canvas width="450" height="450" id="suggest1" style="display: inline;"></canvas>
+        <canvas width="450" height="450" id="suggest2" style="display: inline;"></canvas>
     </div>
     <div>
         <p id="res"></p>
@@ -98,16 +105,23 @@
         var rep = $("input[name='rep']:checked").val();
         var tiles = a.showRes();
         var data = {"size": size, "style": style, "tiles": tiles, "rep": rep};
+        $("#loading-spin").css("visibility", "visible");
+        sug1.cleanAll();
+        sug2.cleanAll();
         $.ajax({
             type: "POST",
             url: "{% url 'brush:suggest' %}",
             data: data,
             dataType: "json",
             success: function (message) {
-                alert("提交成功" + JSON.stringify(message));
+                $("#loading-spin").css("visibility", "hidden");
+                sug1.draw(message[0]);
+                sug2.draw(message[1]);
+                {#alert("提交成功" + JSON.stringify(message));#}
             },
             error: function (message) {
-                alert("提交失败" + JSON.stringify(message));
+                $("#loading-spin").css("visibility", "hidden");
+                alert("Fail:" + JSON.stringify(message));
             }
         });
     });

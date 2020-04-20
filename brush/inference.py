@@ -27,11 +27,12 @@ def infer(game, representation, model_path, **kwargs):
     # agent = PPO2.load(model_path)
     agent = getattr(settings, model_path, None)
     # fixed_tiles = process(kwargs.get('tiles', []))
-    env = make_vec_envs(env_name, representation, None, 1, **kwargs)
-    obs = env.reset()
-    dones = False
-    info = None
+    res = []
     for i in range(kwargs.get('trials', 1)):
+        env = make_vec_envs(env_name, representation, None, 1, **kwargs)
+        info = None
+        obs = env.reset()
+        dones = False
         while not dones:
             action, _ = agent.predict(obs)
             obs, _, dones, info = env.step(action)
@@ -42,8 +43,9 @@ def infer(game, representation, model_path, **kwargs):
                 break
             # if dones and satisfy_fixed_tiles(fixed_tiles):
             #     break
+        res.append(info[0]['terminal_observation'])
         # time.sleep(0.2)
-    return info[0]['terminal_observation']
+    return res
 
 
 def satisfy_fixed_tiles(fixed_tiles):

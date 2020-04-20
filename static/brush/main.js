@@ -153,6 +153,20 @@ run.prototype.cleanAll = function () {
     for (let i = 0; i < this.bgHeightLength; i++) {
         for (let j = 0; j < this.bgWidthLength; j++) {
             this.cvs.beginPath();
+            this.cvs.fillStyle = "#FFFFFF";
+            this.cvs.fillRect(j * this.boxSize + 1, i * this.boxSize + 1, this.boxSize - 1, this.boxSize - 1);
+            this.cvs.fill();
+            this.cvs.stroke();
+            this.cvs.closePath();
+        }
+    }
+    this.clickedArr = [];
+};
+
+run.prototype.reset = function() {
+        for (let i = 0; i < this.bgHeightLength; i++) {
+        for (let j = 0; j < this.bgWidthLength; j++) {
+            this.cvs.beginPath();
             this.cvs.fillStyle = "#e8e8e8";
             this.cvs.fillRect(j * this.boxSize + 1, i * this.boxSize + 1, this.boxSize - 1, this.boxSize - 1);
             this.cvs.fill();

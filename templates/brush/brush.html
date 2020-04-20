@@ -106,8 +106,8 @@
         var tiles = a.showRes();
         var data = {"size": size, "style": style, "tiles": tiles, "rep": rep};
         $("#loading-spin").css("visibility", "visible");
-        sug1.cleanAll();
-        sug2.cleanAll();
+        sug1.reset();
+        sug2.reset();
         $.ajax({
             type: "POST",
             url: "{% url 'brush:suggest' %}",

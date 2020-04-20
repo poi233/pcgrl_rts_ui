@@ -106,8 +106,7 @@
         var tiles = a.showRes();
         var data = {"size": size, "style": style, "tiles": tiles, "rep": rep};
         $("#loading-spin").css("visibility", "visible");
-        sug1.reset();
-        sug2.reset();
+        reset_suggestion(sugs, false, 0);
         $.ajax({
             type: "POST",
             url: "{% url 'brush:suggest' %}",
@@ -115,8 +114,9 @@
             dataType: "json",
             success: function (message) {
                 $("#loading-spin").css("visibility", "hidden");
-                sug1.draw(message[0]);
-                sug2.draw(message[1]);
+                for (let i = 0; i < sugs.length; i++) {
+                    sugs[i].draw(message[i]);
+                }
                 {#alert("提交成功" + JSON.stringify(message));#}
             },
             error: function (message) {

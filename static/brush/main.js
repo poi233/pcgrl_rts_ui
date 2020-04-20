@@ -163,8 +163,8 @@ run.prototype.cleanAll = function () {
     this.clickedArr = [];
 };
 
-run.prototype.reset = function() {
-        for (let i = 0; i < this.bgHeightLength; i++) {
+run.prototype.reset = function () {
+    for (let i = 0; i < this.bgHeightLength; i++) {
         for (let j = 0; j < this.bgWidthLength; j++) {
             this.cvs.beginPath();
             this.cvs.fillStyle = "#e8e8e8";
@@ -202,26 +202,46 @@ let suggest1 = document.querySelector("#suggest1");
 let suggest2 = document.querySelector("#suggest2");
 let cvs = canvas.getContext("2d");
 let a = new run(canvas, {}, true);
-let sug1 = new run(suggest1, {}, false);
-let sug2 = new run(suggest2, {}, false);
+let sugs = [];
+sugs.push(new run(suggest1, {}, false));
+sugs.push(new run(suggest2, {}, false));
+// let sug1 = new run(suggest1, {}, false);
+// let sug2 = ;
+
+function reset_suggestion(sugs, changeSize, size) {
+    for (let i = 0; i < sugs.length; i++) {
+        if (changeSize) {
+            sugs[i].cleanAll();
+            sugs[i].start(size);
+        } else {
+            sugs[i].reset();
+        }
+    }
+    // sug.cleanAll();
+    // sug.reset();
+}
 
 $('#small').on('click', function () {
     a.clean();
     a.cleanAll();
     a.start(8);
+    reset_suggestion(sugs, true, 8);
 });
 
 $('#medium').on('click', function () {
     a.clean();
     a.cleanAll();
     a.start(12);
+    reset_suggestion(sugs, true, 12);
 });
 
 $('#large').on('click', function () {
     a.clean();
     a.cleanAll();
     a.start(16);
+    reset_suggestion(sugs, true, 16);
 });
+
 $("#base").on('click', function () {
     a.currentBrush = 1;
     a.changeClickColor("#00ff00")

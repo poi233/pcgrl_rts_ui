@@ -1,8 +1,9 @@
-from django.core.serializers import json
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 from brush.inference import infer
+import numpy as np
+import json
 import os
 from django.conf import settings
 
@@ -25,6 +26,8 @@ def suggest(request):
         'verbose': False,
         'tiles': tiles
     }
-    obs = infer(game, representation, model_path, **kwargs)
-    print(obs)
-    return JsonResponse("123", safe=False)
+    map = infer(game, representation, model_path, **kwargs)
+    res = [[int(np.argmax(item)) for item in row] for row in map]
+    for row in res:
+        print(row)
+    return JsonResponse(res, safe=False)

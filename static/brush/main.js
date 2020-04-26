@@ -200,13 +200,11 @@ run.prototype.drawBgBox = function (x, y, z) {
 let canvas = document.querySelector("#canvas");
 let suggest1 = document.querySelector("#suggest1");
 let suggest2 = document.querySelector("#suggest2");
-let cvs = canvas.getContext("2d");
+// let cvs = canvas.getContext("2d");
 let a = new run(canvas, {}, true);
 let sugs = [];
 sugs.push(new run(suggest1, {}, false));
 sugs.push(new run(suggest2, {}, false));
-// let sug1 = new run(suggest1, {}, false);
-// let sug2 = ;
 
 function reset_suggestion(sugs, changeSize, size) {
     for (let i = 0; i < sugs.length; i++) {
@@ -217,28 +215,27 @@ function reset_suggestion(sugs, changeSize, size) {
             sugs[i].reset();
         }
     }
-    // sug.cleanAll();
-    // sug.reset();
+}
+
+function reset_canvas(canvas, size) {
+    canvas.clean();
+    canvas.cleanAll();
+    canvas.start(size);
+
 }
 
 $('#small').on('click', function () {
-    a.clean();
-    a.cleanAll();
-    a.start(8);
+    reset_canvas(a, 8);
     reset_suggestion(sugs, true, 8);
 });
 
 $('#medium').on('click', function () {
-    a.clean();
-    a.cleanAll();
-    a.start(12);
+    reset_canvas(a, 12);
     reset_suggestion(sugs, true, 12);
 });
 
 $('#large').on('click', function () {
-    a.clean();
-    a.cleanAll();
-    a.start(16);
+    reset_canvas(a, 16);
     reset_suggestion(sugs, true, 16);
 });
 

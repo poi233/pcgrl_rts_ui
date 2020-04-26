@@ -5,6 +5,7 @@ from django.conf import settings
 
 import model
 from utils import make_vec_envs
+import numpy as np
 
 
 def infer(game, representation, model_path, **kwargs):
@@ -26,16 +27,23 @@ def infer(game, representation, model_path, **kwargs):
     kwargs['render'] = False
     # agent = PPO2.load(model_path)
     agent = getattr(settings, model_path, None)
-    # fixed_tiles = process(kwargs.get('tiles', []))
+    fixed_tiles = process(kwargs.get('tiles', []))
+    if not canCreateMap(fixed_tiles, game.split("_")[0], game.split("_")[1]):
+        return False
     res = []
     for i in range(kwargs.get('trials', 1)):
         env = make_vec_envs(env_name, representation, None, 1, **kwargs)
         info = None
         obs = env.reset()
         dones = False
+        cur_pos = {'x': None, 'y': None}
         while not dones:
-            action, _ = agent.predict(obs)
+            action = get_action(cur_pos, fixed_tiles, representation)
+            if action is None:
+                action, _ = agent.predict(obs)
             obs, _, dones, info = env.step(action)
+            cur_pos['x'] = info[0]['pos'][0]
+            cur_pos['y'] = info[0]['pos'][1]
             # check_tiles(fixed_tiles, obs)
             if kwargs.get('verbose', False):
                 print(info[0])
@@ -46,6 +54,41 @@ def infer(game, representation, model_path, **kwargs):
         res.append(info[0]['terminal_observation'])
         # time.sleep(0.2)
     return res
+
+
+def get_action(cur_pos, fixed_tiles, representation):
+    action = None
+    if representation == 'narrow' or representation == 'turtle':
+        if cur_pos['x'] is None:
+            action = np.ndarray(shape=(1,))
+            action[0] = 0
+        elif isFixed(cur_pos, fixed_tiles):
+            action = np.ndarray(shape=(1,))
+            action[0] = fixed_tiles[(cur_pos['y'], cur_pos['x'])] + 1
+    if representation == 'wide':
+        if isFixed(cur_pos, fixed_tiles):
+            action = []
+    return action
+
+def canCreateMap(fixed_tiles, size, style):
+    base_count = 0
+    resource_count = 0
+    obstacle_count = 0
+    for pos in fixed_tiles:
+        if fixed_tiles[pos] == 1:
+            base_count += 1
+        elif fixed_tiles[pos] == 2:
+            resource_count += 1
+        elif fixed_tiles[pos] == 3:
+            obstacle_count += 1
+    if style == 'fair':
+        return base_count <= 2 and resource_count <= 8 / 2 and obstacle_count <= 8
+    else:
+        return base_count <= 2 and resource_count <= 8 and obstacle_count <= 8 * 2
+
+
+def isFixed(pos, fixed_tiles):
+    return (pos['y'], pos['x']) in fixed_tiles
 
 
 def satisfy_fixed_tiles(fixed_tiles):
@@ -71,9 +114,8 @@ def process(tiles):
         if tile == "":
             break
         tmp = tile.split(",")
-        res[(int(tmp[0]), int(tmp[1]), int(tmp[2]))] = False
+        res[(int(tmp[0]), int(tmp[1]))] = int(tmp[2])
     return res
-
 
 ################################## MAIN ########################################
 # game = 'small_fair_rts'

@@ -160,6 +160,7 @@ class PcgrlEnv(gym.Env):
         info["changes"] = self._changes
         info["max_iterations"] = self._max_iterations
         info["max_changes"] = self._max_changes
+        info["pos"] = (x, y)
         # return the values
         return observation, reward, done, info
 

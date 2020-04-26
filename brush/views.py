@@ -29,6 +29,8 @@ def suggest(request):
     }
     maps = infer(game, representation, model_path, **kwargs)
     # format output
+    if not maps:
+        return JsonResponse(False, safe=False)
     res = [[[int(np.argmax(item)) for item in row] for row in map] for map in maps]
     for item in res:
         for row in item:

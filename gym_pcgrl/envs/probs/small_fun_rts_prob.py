@@ -9,18 +9,21 @@ class SmallFunRTSProblem(RTSProblem):
 
         self._min_resource = self._width / 8 * 2
         self._max_resource = self._width / 2 * 2
-        self._max_chock_points = self._width * 2
+        self._max_obstacles = self._width * 2
         self._resource_distance_diff = self._width / 8 * 2
+        self._area_control_diff = self._width / 8 * 5
+
 
         self._rewards = {
             "base_count": 6,
             "base_distance": 2,
+            "area_control": 4,
             # "base_space": 2,
             # "asymmetry": 1,
             "resource_count": 4,
-            "resource_distance": 1,
+            "resource_distance": 2,
             # "resource_clustering": 1,
             # "path_overlapping": 2,
-            "obstacle": 3,
+            "obstacle": 1,
             "region": 6
         }

@@ -22,6 +22,7 @@ def suggest(request):
     representation = rep
     model_path = ("%s_%s_%s" % (size, style, rep)).upper()
     kwargs = {
+        'change_limit': 5000,
         'change_percentage': 0.4,
         'trials': 2,
         'verbose': True,

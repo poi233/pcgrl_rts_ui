@@ -1,11 +1,13 @@
 """
 Run a trained agent and get generated maps
 """
+import random
+
+import numpy as np
 from django.conf import settings
 
 import model
 from utils import make_vec_envs
-import numpy as np
 
 
 def infer(game, representation, model_path, **kwargs):
@@ -28,6 +30,7 @@ def infer(game, representation, model_path, **kwargs):
     # agent = PPO2.load(model_path)
     agent = getattr(settings, model_path, None)
     fixed_tiles = process(kwargs.get('tiles', []))
+    change_limit = kwargs.get('change_limit', 5000)
     if not canCreateMap(fixed_tiles, game.split("_")[0], game.split("_")[1]):
         return False
     res = []
@@ -38,37 +41,55 @@ def infer(game, representation, model_path, **kwargs):
         dones = False
         cur_pos = {'x': None, 'y': None}
         while not dones:
-            action = get_action(cur_pos, fixed_tiles, representation)
-            if action is None:
-                action, _ = agent.predict(obs)
-            obs, _, dones, info = env.step(action)
+            obs, _, dones, info = step(cur_pos, fixed_tiles, representation, env, agent, obs)
             cur_pos['x'] = info[0]['pos'][0]
             cur_pos['y'] = info[0]['pos'][1]
-            # check_tiles(fixed_tiles, obs)
             if kwargs.get('verbose', False):
                 print(info[0])
             if dones:
                 break
-            # if dones and satisfy_fixed_tiles(fixed_tiles):
-            #     break
+            if info[0]['changes'] > change_limit:
+                return False
         res.append(info[0]['terminal_observation'])
-        # time.sleep(0.2)
     return res
 
 
-def get_action(cur_pos, fixed_tiles, representation):
+def step(cur_pos, fixed_tiles, representation, env, agent, obs):
     action = None
-    if representation == 'narrow' or representation == 'turtle':
+    # narrow
+    if representation == 'narrow':
         if cur_pos['x'] is None:
             action = np.ndarray(shape=(1,))
             action[0] = 0
         elif isFixed(cur_pos, fixed_tiles):
             action = np.ndarray(shape=(1,))
             action[0] = fixed_tiles[(cur_pos['y'], cur_pos['x'])] + 1
+        else:
+            action, _ = agent.predict(obs)
+    # turtle
+    if representation == 'turtle':
+        if cur_pos['x'] is None:
+            action = np.ndarray(shape=(1,), dtype=np.int16)
+            action[0] = int(random.randint(0, 3))
+        elif isFixed(cur_pos, fixed_tiles):
+            action = np.ndarray(shape=(1,), dtype=np.int16)
+            action[0] = fixed_tiles[(cur_pos['y'], cur_pos['x'])] + 4
+            env.step(action)
+            action[0] = int(random.randint(0, 3))
+        else:
+            action, _ = agent.predict(obs)
+    # wide
     if representation == 'wide':
-        if isFixed(cur_pos, fixed_tiles):
-            action = []
-    return action
+        action, _ = agent.predict(obs)
+        y, x, tile = np.unravel_index(action, (8, 8, 4))
+        pos = {'x': x[0], 'y': y[0]}
+        if isFixed(pos, fixed_tiles):
+            action[0] -= tile[0]
+            action[0] += fixed_tiles[(pos['y'], pos['x'])]
+    # final step
+    obs, _, dones, info = env.step(action)
+    return obs, _, dones, info
+
 
 def canCreateMap(fixed_tiles, size, style):
     base_count = 0
@@ -89,22 +110,6 @@ def canCreateMap(fixed_tiles, size, style):
 
 def isFixed(pos, fixed_tiles):
     return (pos['y'], pos['x']) in fixed_tiles
-
-
-def satisfy_fixed_tiles(fixed_tiles):
-    count = 0
-    for tile in fixed_tiles:
-        if fixed_tiles[tile]:
-            count += 1
-    return count >= len(fixed_tiles) * 0.8
-
-
-def check_tiles(fixed_tiles, obs):
-    for tile in fixed_tiles:
-        if int(obs[0][tile[0]][tile[1]][tile[2]]) == 1:
-            fixed_tiles[tile] = True
-        else:
-            fixed_tiles[tile] = False
 
 
 def process(tiles):

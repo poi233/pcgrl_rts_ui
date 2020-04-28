@@ -114,6 +114,9 @@
             dataType: "json",
             success: function (message) {
                 $("#loading-spin").css("visibility", "hidden");
+                if (message === false) {
+                    alert("Input invalid or timeout.")
+                }
                 for (let i = 0; i < sugs.length; i++) {
                     sugs[i].draw(message[i]);
                 }

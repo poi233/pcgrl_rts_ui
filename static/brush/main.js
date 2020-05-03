@@ -8,7 +8,7 @@ function run(canvas, obj, canClick) {
     this.bgWidthLength = 8;
     this.bgHeightLength = 8;
     this.clickedArr = [];
-    this.currentBrush = 2;
+    this.currentBrush = 3;
     this.start(this.bgWidthLength);
     if (canClick) {
         this.click();

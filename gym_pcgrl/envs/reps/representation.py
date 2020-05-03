@@ -52,6 +52,7 @@ class Representation:
     """
     def adjust_param(self, **kwargs):
         self._random_start = kwargs.get('random_start', self._random_start)
+        self._old_map = kwargs.get('old_map', self._old_map)
 
     """
     Gets the action space used by the representation

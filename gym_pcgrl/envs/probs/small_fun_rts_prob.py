@@ -14,16 +14,16 @@ class SmallFunRTSProblem(RTSProblem):
         self._area_control_diff = self._width / 8 * 5
 
 
-        self._rewards = {
-            "base_count": 6,
-            "base_distance": 2,
-            "area_control": 4,
-            # "base_space": 2,
-            # "asymmetry": 1,
-            "resource_count": 4,
-            "resource_distance": 2,
-            # "resource_clustering": 1,
-            # "path_overlapping": 2,
-            "obstacle": 1,
-            "region": 6
-        }
+        # self._rewards = {
+        #     "base_count": 6,
+        #     "base_distance": 2,
+        #     "area_control": 4,
+        #     # "base_space": 2,
+        #     # "asymmetry": 1,
+        #     "resource_count": 4,
+        #     "resource_distance": 2,
+        #     # "resource_clustering": 1,
+        #     # "path_overlapping": 2,
+        #     "obstacle": 1,
+        #     "region": 6
+        # }

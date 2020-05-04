@@ -5,6 +5,7 @@ import random
 
 import numpy as np
 from django.conf import settings
+import random
 
 import model
 from utils import make_vec_envs
@@ -20,7 +21,7 @@ def infer(game, representation, model_path, **kwargs):
         model.FullyConvPolicy = model.FullyConvPolicySmallMap
         kwargs['cropped_size'] = 8
     elif "medium" in game:
-        model.FullyConvPolicy = model.FullyConvPolicyBigMap
+        model.FullyConvPolicy = model.FullyConvPolicySmallMap
         kwargs['cropped_size'] = 12
     elif "large" in game:
         model.FullyConvPolicy = model.FullyConvPolicyBigMap
@@ -30,18 +31,25 @@ def infer(game, representation, model_path, **kwargs):
     # agent = PPO2.load(model_path)
     agent = getattr(settings, model_path, None)
     fixed_tiles = process(kwargs.get('tiles', []))
+    initial_map = createMap(kwargs['cropped_size'], fixed_tiles)
+    kwargs['old_map'] = initial_map
     change_limit = kwargs.get('change_limit', 5000)
-    if not canCreateMap(fixed_tiles, game.split("_")[0], game.split("_")[1]):
-        return False
-    res = []
+    # if not canCreateMap(fixed_tiles, game.split("_")[0], game.split("_")[1]):
+    #     return False
+    sug_info = {}
     for i in range(kwargs.get('trials', 1)):
+        sug_info[i] = {}
         env = make_vec_envs(env_name, representation, None, 1, **kwargs)
         info = None
         obs = env.reset()
         dones = False
         cur_pos = {'x': None, 'y': None}
         while not dones:
-            obs, _, dones, info = step(cur_pos, fixed_tiles, representation, env, agent, obs)
+            if i == 0:
+                action, _ = agent.predict(obs)
+                obs, _, dones, info = env.step(action)
+            else:
+                obs, _, dones, info = step(cur_pos, fixed_tiles, representation, env, agent, obs)
             cur_pos['x'] = info[0]['pos'][0]
             cur_pos['y'] = info[0]['pos'][1]
             if kwargs.get('verbose', False):
@@ -50,12 +58,18 @@ def infer(game, representation, model_path, **kwargs):
                 break
             if info[0]['changes'] > change_limit:
                 return False
-        res.append(info[0]['terminal_observation'])
-    return res
+        sug_info[i]["info"] = info[0]
+    return sug_info
 
 
 def step(cur_pos, fixed_tiles, representation, env, agent, obs):
     action = None
+    # change if reserve this tile
+    will_change = random.randint(1, 100)
+    if will_change < 20:
+        action, _ = agent.predict(obs)
+        obs, _, dones, info = env.step(action)
+        return obs, _, dones, info
     # narrow
     if representation == 'narrow':
         if cur_pos['x'] is None:
@@ -122,6 +136,11 @@ def process(tiles):
         res[(int(tmp[0]), int(tmp[1]))] = int(tmp[2])
     return res
 
+def createMap(size, fixed_tiles):
+    initial_map = np.zeros((size, size), dtype=int)
+    for item in fixed_tiles:
+        initial_map[item[1]][item[0]] = fixed_tiles[item]
+    return initial_map
 ################################## MAIN ########################################
 # game = 'small_fair_rts'
 # representation = 'narrow'

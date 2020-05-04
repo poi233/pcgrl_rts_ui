@@ -2,6 +2,7 @@ import numpy as np
 from django.http import JsonResponse
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
+import json
 
 from brush.inference import infer
 
@@ -26,15 +27,27 @@ def suggest(request):
         'change_percentage': 0.4,
         'trials': 2,
         'verbose': True,
-        'tiles': tiles
+        'tiles': tiles,
+        'random_start': False
     }
-    maps = infer(game, representation, model_path, **kwargs)
+    sug_info = infer(game, representation, model_path, **kwargs)
     # format output
-    if not maps:
+    if not sug_info:
         return JsonResponse(False, safe=False)
-    res = [[[int(np.argmax(item)) for item in row] for row in map] for map in maps]
+    res = {}
+    for i in range(len(sug_info)):
+        res[i] = {}
+        res[i]['map'] = [[int(np.argmax(item)) for item in row] for row in sug_info[i]["info"]["terminal_observation"]]
+        res[i]['base_count'] = sug_info[i]["info"]["base_count"]
+        res[i]['base_distance'] = int(sug_info[i]["info"]["base_distance"])
+        res[i]['resource_count'] = sug_info[i]["info"]["resource_count"]
+        res[i]['resource_distance'] = sug_info[i]["info"]["resource_distance"]
+        res[i]['resource_balance'] = sug_info[i]["info"]["resource_balance"]
+        res[i]['obstacle'] = sug_info[i]["info"]["obstacle"]
+        res[i]['region'] = sug_info[i]["info"]["region"]
+        res[i]['area_control'] = sug_info[i]["info"]["area_control"]
+
     for item in res:
-        for row in item:
-            print(row)
+        print(res[item])
         print("--------------------------------")
-    return JsonResponse(res, safe=False)
+    return JsonResponse(json.dumps(res), safe=False)

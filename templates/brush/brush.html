@@ -18,70 +18,200 @@
     <link rel="stylesheet" href="{% static 'brush/style.css' %}">
 </head>
 <body>
-<div class="main">
-    <div id="toolbar" style="margin-bottom: 20px;">
-        <div class="btn-group btn-group-toggle" data-toggle="buttons">
-            <label class="btn btn-secondary active">
-                <input type="radio" name="tile" id="base" value="base"> Base
-            </label>
-            <label class="btn btn-secondary">
-                <input type="radio" name="tile" id="resource" value="resource"> Resource
-            </label>
-            <label class="btn btn-secondary">
-                <input type="radio" name="tile" id="obstacle" value="obstacle" checked="checked"> Obstacle
-            </label>
+<div class="container">
+    <div class="main row">
+        <div class="col">
+            <div id="toolbar" style="margin-bottom: 20px;">
+                <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                    <label class="btn btn-secondary active">
+                        <input type="radio" name="tile" id="base" value="base"> Base
+                    </label>
+                    <label class="btn btn-secondary">
+                        <input type="radio" name="tile" id="resource" value="resource"> Resource
+                    </label>
+                    <label class="btn btn-secondary">
+                        <input type="radio" name="tile" id="obstacle" value="obstacle" checked="checked"> Obstacle
+                    </label>
+                </div>
+                <div id="size-selector" class="btn-group btn-group-toggle" data-toggle="buttons">
+                    <label class="btn btn-secondary active">
+                        <input type="radio" name="size" id="small" value="small" checked="checked"> Small
+                    </label>
+                    <label class="btn btn-secondary">
+                        <input type="radio" name="size" id="medium" value="medium"> Medium
+                    </label>
+                    <label class="btn btn-secondary">
+                        <input type="radio" name="size" id="large" value="large"> Large
+                    </label>
+                </div>
+                <div id="style-selector" class="btn-group btn-group-toggle" data-toggle="buttons">
+                    <label class="btn btn-secondary active">
+                        <input type="radio" name="style" id="fair" value="fair" checked="checked"> Fair
+                    </label>
+                    <label class="btn btn-secondary">
+                        <input type="radio" name="style" id="fun" value="fun"> Fun
+                    </label>
+                </div>
+                <div id="rep-selector" class="btn-group btn-group-toggle" data-toggle="buttons">
+                    <label class="btn btn-secondary active">
+                        <input type="radio" name="rep" id="narrow" value="narrow" checked="checked"> Narrow
+                    </label>
+                    <label class="btn btn-secondary">
+                        <input type="radio" name="rep" id="turtle" value="turtle"> Turtle
+                    </label>
+                    <label class="btn btn-secondary">
+                        <input type="radio" name="rep" id="wide" value="wide"> Wide
+                    </label>
+                </div>
+                <button class="btn btn-primary" id="clean">Clean</button>
+                <button class="btn btn-success" id="suggestion">Suggestion</button>
+                <div id="loading-spin" class="spinner-border text-primary" role="status"
+                     style="visibility: hidden; margin-left: 5px;">
+                    <span class="sr-only">Loading...</span>
+                </div>
+            </div>
         </div>
-        <div id="size-selector" class="btn-group btn-group-toggle" data-toggle="buttons">
-            <label class="btn btn-secondary active">
-                <input type="radio" name="size" id="small" value="small" checked="checked"> Small
-            </label>
-            <label class="btn btn-secondary">
-                <input type="radio" name="size" id="medium" value="medium"> Medium
-            </label>
-            <label class="btn btn-secondary">
-                <input type="radio" name="size" id="large" value="large"> Large
-            </label>
-        </div>
-        <div id="style-selector" class="btn-group btn-group-toggle" data-toggle="buttons">
-            <label class="btn btn-secondary active">
-                <input type="radio" name="style" id="fair" value="fair" checked="checked"> Fair
-            </label>
-            <label class="btn btn-secondary">
-                <input type="radio" name="style" id="fun" value="fun"> Fun
-            </label>
-        </div>
-        <div id="rep-selector" class="btn-group btn-group-toggle" data-toggle="buttons">
-            <label class="btn btn-secondary active">
-                <input type="radio" name="rep" id="narrow" value="narrow" checked="checked"> Narrow
-            </label>
-            <label class="btn btn-secondary">
-                <input type="radio" name="rep" id="turtle" value="turtle"> Turtle
-            </label>
-            <label class="btn btn-secondary">
-                <input type="radio" name="rep" id="wide" value="wide"> Wide
-            </label>
-        </div>
-
-        <button class="btn btn-primary" id="clean">Clean</button>
-{#        <button class="btn btn-primary" id="show">Show</button>#}
-        <button class="btn btn-success" id="suggestion">Suggestion</button>
-
-        <div id="loading-spin" class="spinner-border text-primary" role="status" style="visibility: hidden; margin-left: 5px;">
-            <span class="sr-only">Loading...</span>
-        </div>
-
     </div>
-    <div>
-        <canvas width="450" height="450" id="canvas" style="display: inline;"></canvas>
-        <canvas width="450" height="450" id="suggest1" style="display: inline;"></canvas>
-        <canvas width="450" height="450" id="suggest2" style="display: inline;"></canvas>
+    <div class="row">
+        <div class="col-4">
+            <canvas width="380" height="380" id="canvas" style="display: inline;"></canvas>
+        </div>
+        <div class="col-4">
+            <canvas width="380" height="380" id="suggest1" style="display: inline;"></canvas>
+        </div>
+        <div class="col-4">
+            <canvas width="380" height="380" id="suggest2" style="display: inline;"></canvas>
+        </div>
     </div>
-    <div>
-        <p id="origin"></p>
-        <p id="sug1"></p>
-        <p id="sug2"></p>
+    <div class="row">
+        <div class="col">
+            <h5>Suggest 1</h5>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <label>base distance</label>
+            <div class="progress">
+                <div id="base_distance_1" class="progress-bar" role="progressbar" style="width: 0%;" aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="100">0
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <label>resource count</label>
+            <div class="progress">
+                <div id="resource_count_1" class="progress-bar" role="progressbar" style="width: 0%;"
+                     aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="100">0
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <label>resource distance</label>
+            <div class="progress">
+                <div id="resource_distance_1" class="progress-bar" role="progressbar" style="width: 0%;"
+                     aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="100">0
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <label>resource balance</label>
+            <div class="progress">
+                <div id="resource_balance_1" class="progress-bar" role="progressbar" style="width: 0%;" aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="100">0
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <label>obstacle</label>
+            <div class="progress">
+                <div id="obstacle_1" class="progress-bar" role="progressbar" style="width: 0%;" aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="100">0
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <label>area control</label>
+            <div class="progress">
+                <div id="area_control_1" class="progress-bar" role="progressbar" style="width: 0%;" aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="100">0
+                </div>
+            </div>
+        </div>
+    </div>
+        <div class="row">
+        <div class="col">
+            <h5>Suggest 2</h5>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <label>base distance</label>
+            <div class="progress">
+                <div id="base_distance_2" class="progress-bar" role="progressbar" style="width: 0%;" aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="100">0
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <label>resource count</label>
+            <div class="progress">
+                <div id="resource_count_2" class="progress-bar" role="progressbar" style="width: 0%;"
+                     aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="100">0
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <label>resource distance</label>
+            <div class="progress">
+                <div id="resource_distance_2" class="progress-bar" role="progressbar" style="width: 0%;"
+                     aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="100">0
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <label>resource balance</label>
+            <div class="progress">
+                <div id="resource_balance_2" class="progress-bar" role="progressbar" style="width: 0%;" aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="100">0
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <label>obstacle</label>
+            <div class="progress">
+                <div id="obstacle_2" class="progress-bar" role="progressbar" style="width: 0%;" aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="100">0
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <label>area control</label>
+            <div class="progress">
+                <div id="area_control_2" class="progress-bar" role="progressbar" style="width: 0%;" aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="100">0
+                </div>
+            </div>
+        </div>
     </div>
 </div>
+
+</body>
 <script src="https://cdn.bootcss.com/downloadjs/1.4.7/download.min.js"></script>
 <script src="{% static 'brush/main.js' %}"></script>
 <script>
@@ -122,7 +252,7 @@
                 }
                 for (let i = 0; i < sugs.length; i++) {
                     sugs[i].draw(result[i]['map']);
-                    show_info($("#sug" + (i + 1)), result[i]);
+                    reset_info(i + 1, result[i], result["range"]);
                 }
             },
             error: function (message) {
@@ -132,19 +262,26 @@
         });
     });
 
-    function show_info(widget, result) {
-        widget.html("");
-        widget.append("base_count:" + result["base_count"] + ", ");
-        widget.append("base_distance:" + result["base_distance"] + ", ");
-        widget.append("resource_count:" + result["resource_count"] + ", ");
-        widget.append("resource_distance:" + result["resource_distance"] + ", ");
-        widget.append("resource_balance:" + result["resource_balance"] + ", ");
-        widget.append("obstacle:" + result["obstacle"] + ", ");
-        widget.append("region:" + result["region"] + ", ");
-        widget.append("area_control:" + result["area_control"]);
-
+    function reset_info(index, result, range) {
+        var base_distance = $("#base_distance_" + index);
+        var resource_count = $("#resource_count_" + index);
+        var resource_distance = $("#resource_distance_" + index);
+        var resource_balance = $("#resource_balance_" + index);
+        var obstalce = $("#obstacle_" + index);
+        var area_control = $("#area_control_" + index);
+        base_distance.html(result["base_distance"]);
+        base_distance.css("width","100%");
+        resource_count.html(result["resource_count"]);
+        resource_count.css("width", "100%");
+        resource_distance.html(result["resource_distance"]);
+        resource_distance.css("width", "100%");
+        resource_balance.html(result["resource_balance"]);
+        resource_balance.css("width", "100%");
+        obstalce.html(result["obstacle"]);
+        obstalce.css("width", "100%");
+        area_control.html(result["area_control"]);
+        area_control.css("width", "100%");
     }
-
 
 </script>
 </body>

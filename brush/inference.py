@@ -59,6 +59,7 @@ def infer(game, representation, model_path, **kwargs):
             if info[0]['changes'] > change_limit:
                 return False
         sug_info[i]["info"] = info[0]
+    sug_info["range"] = get_range(game.split("_")[0], game.split("_")[1])
     return sug_info
 
 
@@ -134,6 +135,24 @@ def process(tiles):
             break
         tmp = tile.split(",")
         res[(int(tmp[0]), int(tmp[1]))] = int(tmp[2])
+    return res
+
+def get_range(size, style):
+    if size == "small":
+        width = 8
+    else:
+        width = 12
+    if style == "fair":
+        times = 1
+    else:
+        times = 2
+    res = dict()
+    res["base_distance"] = [-width * 2, width / 2]
+    res["resource_count"] = [width / 8 * times, width / 2 * times]
+    res["resource_distance"] = [-width, width / 8 * times]
+    res["resource_balance"] = [-width, width / 8 * 3]
+    res["obstacle"] = [0, width / 8 * times]
+    res["area_control"] = [-width * width, width / 2]
     return res
 
 def createMap(size, fixed_tiles):

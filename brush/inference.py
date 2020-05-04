@@ -56,8 +56,8 @@ def infer(game, representation, model_path, **kwargs):
                 print(info[0])
             if dones:
                 break
-            if info[0]['changes'] > change_limit:
-                return False
+            # if info[0]['changes'] > change_limit:
+            #     return False
         sug_info[i]["info"] = info[0]
     sug_info["range"] = get_range(game.split("_")[0], game.split("_")[1])
     return sug_info

@@ -271,22 +271,22 @@
         var area_control = $("#area_control_" + index);
         const bd_eval = get_range_evaluation(result["base_distance"], range["base_distance"]);
         base_distance.html(bd_eval);
-        base_distance.css("width",bd_eval.concat("%"));
+        base_distance.css("width", bd_eval + "%");
         const rc_eval = get_range_evaluation(result["resource_count"], range["resource_count"]);
         resource_count.html(rc_eval);
-        resource_count.css("width", rc_eval.concat("%"));
+        resource_count.css("width", rc_eval + "%");
         const rd_eval = get_range_evaluation(result["resource_distance"], range["resource_distance"]);
         resource_distance.html(rd_eval);
-        resource_distance.css("width", rd_eval.concat("%"));
+        resource_distance.css("width", rd_eval + "%");
         const rb_eval = get_range_evaluation(result["resource_balance"], range["resource_balance"]);
         resource_balance.html(rb_eval);
-        resource_balance.css("width", rb_eval.concat("%"));
+        resource_balance.css("width", rb_eval + "%");
         const ob_eval = get_range_evaluation(result["obstacle"], range["obstacle"]);
         obstalce.html(ob_eval);
-        obstalce.css("width", ob_eval.concat("%"));
+        obstalce.css("width", ob_eval + "%");
         const ac_eval = get_range_evaluation(result["area_control"], range["area_control"]);
         area_control.html(ac_eval);
-        area_control.css("width", ac_eval.concat("%"));
+        area_control.css("width", ac_eval + "%");
     }
 
     function get_range_evaluation(val, range) {

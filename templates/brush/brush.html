@@ -301,9 +301,9 @@
         if (val <= max_optimal && val >= min_optimal)
             evaluation = 100;
         else if (val < min_optimal)
-            evaluation = (min_optimal - val) / distance * 100;
+            evaluation = (distance - (min_optimal - val)) / distance * 100;
         else if (val > max_optimal)
-            evaluation = (val - max_optimal) / distance * 100;
+            evaluation = (distance - (val - max_optimal)) / distance * 100;
 
         return evaluation.toString()
     }

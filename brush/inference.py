@@ -151,9 +151,9 @@ def get_range(size, style):
     tmp["base_distance"] = [width * 3 / 8 - width * 2 + width / 2, width * 3 / 8, 0, width * 3 / 8]
     tmp["resource_count"] = [0, width * width - 2, width / 8, width / 2]
     tmp["resource_distance"] = [1 - width * 2, 1, 0, 1]
-    tmp["resource_balance"] = [width / 4 - width / 2, width / 4, 0, width / 4]
+    tmp["resource_balance"] = [width / 4 - width / 2, width / 4, width / 4, width / 4]
     tmp["obstacle"] = [0, width * width, 0, width / 2 * 3]
-    tmp["area_control"] = [width / 4 * 2 - width * width, width / 4 * 2, 0, width / 4 * 2]
+    tmp["area_control"] = [width / 4 * 2 - width * width, width / 4 * 2, width / 4 * 2, width / 4 * 2]
 
     return tmp
 

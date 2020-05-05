@@ -112,7 +112,7 @@ class RTSProblem(Problem):
             # calculate distance
             map_stats["base_distance"] = self._base_distance_diff - abs(self._width / 2 - max(map_stats["base_distance"], dikjstra1[b2_y][b2_x]))
             # calculate resource distance
-            if map_stats["resource_count"] >= self._min_resource and map_stats["resource_count"] <= self._max_resource:
+            if map_stats["resource_count"] >= self._min_resource: #and map_stats["resource_count"] <= self._max_resource:
                 resources = []
                 resources.extend(map_locations["resource"])
                 sum1 = 0

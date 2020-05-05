@@ -65,7 +65,7 @@ def infer(game, representation, model_path, **kwargs):
 
 def step(cur_pos, fixed_tiles, representation, env, agent, obs):
     action = None
-    # change if reserve this tile
+    # change this tile or not
     will_change = random.randint(1, 100)
     if will_change < 20:
         action, _ = agent.predict(obs)

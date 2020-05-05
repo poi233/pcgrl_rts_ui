@@ -97,10 +97,10 @@ class RTSProblem(Problem):
             "base_count": calc_certain_tile(map_locations, ["base"]),
             "resource_count": calc_certain_tile(map_locations, ["resource"]),
             "obstacle": calc_certain_tile(map_locations, ["obstacle"]),
-            "base_distance": 0,
-            "resource_distance": 0,
-            "resource_balance": 0,
-            "area_control": 0,
+            "base_distance": -500,
+            "resource_distance": -500,
+            "resource_balance": -500,
+            "area_control": -500,
             "region": calc_num_regions(map, map_locations, ["empty", "base", "resource"])
         }
         if map_stats["base_count"] == 2:
@@ -189,7 +189,8 @@ class RTSProblem(Problem):
         basic_rules = new_stats["base_count"] == self._target_base and \
                       new_stats["resource_count"] >= self._min_resource and \
                       new_stats["region"] == 1
-        optional_rules = True
+        eval_total = new_stats["base_distance"] + new_stats["resource_distance"] + new_stats["resource_balance"] + new_stats["area_control"]
+        optional_rules = eval_total > -10
         return basic_rules and optional_rules
     """
     Get any debug information need to be printed

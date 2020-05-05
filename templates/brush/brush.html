@@ -269,22 +269,22 @@
         var resource_balance = $("#resource_balance_" + index);
         var obstalce = $("#obstacle_" + index);
         var area_control = $("#area_control_" + index);
-        const bd_eval = get_range_evaluation(result["base_distance"]);
+        const bd_eval = get_range_evaluation(result["base_distance"], range);
         base_distance.html(bd_eval);
         base_distance.css("width",bd_eval.concat("%"));
-        const rc_eval = get_range_evaluation(result["resource_count"]);
+        const rc_eval = get_range_evaluation(result["resource_count"], range);
         resource_count.html(rc_eval);
         resource_count.css("width", rc_eval.concat("%"));
-        const rd_eval = get_range_evaluation(result["resource_distance"]);
+        const rd_eval = get_range_evaluation(result["resource_distance"], range);
         resource_distance.html(rd_eval);
         resource_distance.css("width", rd_eval.concat("%"));
-        const rb_eval = get_range_evaluation(result["resource_balance"]);
+        const rb_eval = get_range_evaluation(result["resource_balance"], range);
         resource_balance.html(rb_eval);
         resource_balance.css("width", rb_eval.concat("%"));
-        const ob_eval = get_range_evaluation(result["obstacle"]);
+        const ob_eval = get_range_evaluation(result["obstacle"], range);
         obstalce.html(ob_eval);
         obstalce.css("width", ob_eval.concat("%"));
-        const ac_eval = get_range_evaluation(result["area_control"]);
+        const ac_eval = get_range_evaluation(result["area_control"], range);
         area_control.html(ac_eval);
         area_control.css("width", ac_eval.concat("%"));
     }
@@ -296,7 +296,7 @@
         const max_optimal = range[3];
         const left = min_optimal - min_possible;
         const right = max_possible - max_optimal;
-        const distance = max(left, right);
+        const distance = left > right ? left : right;
         let evaluation = 0;
         if (val <= max_optimal && val >= min_optimal)
             evaluation = 100;

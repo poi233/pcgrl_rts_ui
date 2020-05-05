@@ -146,14 +146,31 @@ def get_range(size, style):
         times = 1
     else:
         times = 2
-    res = dict()
-    res["base_distance"] = [-width * 2, width / 2]
-    res["resource_count"] = [width / 8 * times, width / 2 * times]
-    res["resource_distance"] = [-width, width / 8 * times]
-    res["resource_balance"] = [-width, width / 8 * 3]
-    res["obstacle"] = [0, width / 8 * times]
-    res["area_control"] = [-width * width, width / 2]
-    return res
+    tmp = dict()
+    # values of indexes: 0-min possible value, 1-max possible value, 2-min optimal value, 3-max optimal value
+    tmp["base_distance"] = [width * 3 / 8 - width * 2 + width / 2, width * 3 / 8, 0, width * 3 / 8]
+    tmp["resource_count"] = [0, width * width - 2, width / 8, width / 2]
+    tmp["resource_distance"] = [1 - width * 2, 1, 0, 1]
+    tmp["resource_balance"] = [width / 4 - width / 2, width / 4, 0, width / 4]
+    tmp["obstacle"] = [0, width * width, 0, width / 2 * 3]
+    tmp["area_control"] = [width / 4 * 2 - width * width, width / 4 * 2, 0, width / 4 * 2]
+
+    return tmp
+
+def get_range_eval(val, input_pack):
+    min_possible, max_possible, min_optimal, max_optimal = input_pack
+    left = min_optimal - min_possible
+    right = max_possible - max_optimal
+    distance = max(left, right)
+    evaluation = 0
+    if val <= max_optimal and val >= min_optimal:
+        evaluation = 100
+    elif val < min_optimal:
+        evaluation = (min_optimal - val) / distance
+    elif val > max_optimal:
+        evaluation = (val - max_optimal) / distance
+
+    return evaluation
 
 def createMap(size, fixed_tiles):
     initial_map = np.zeros((size, size), dtype=int)

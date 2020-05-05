@@ -269,18 +269,43 @@
         var resource_balance = $("#resource_balance_" + index);
         var obstalce = $("#obstacle_" + index);
         var area_control = $("#area_control_" + index);
-        base_distance.html(result["base_distance"]);
-        base_distance.css("width","100%");
-        resource_count.html(result["resource_count"]);
-        resource_count.css("width", "100%");
-        resource_distance.html(result["resource_distance"]);
-        resource_distance.css("width", "100%");
-        resource_balance.html(result["resource_balance"]);
-        resource_balance.css("width", "100%");
-        obstalce.html(result["obstacle"]);
-        obstalce.css("width", "100%");
-        area_control.html(result["area_control"]);
-        area_control.css("width", "100%");
+        const bd_eval = get_range_evaluation(result["base_distance"]);
+        base_distance.html(bd_eval);
+        base_distance.css("width",bd_eval.concat("%"));
+        const rc_eval = get_range_evaluation(result["resource_count"]);
+        resource_count.html(rc_eval);
+        resource_count.css("width", rc_eval.concat("%"));
+        const rd_eval = get_range_evaluation(result["resource_distance"]);
+        resource_distance.html(rd_eval);
+        resource_distance.css("width", rd_eval.concat("%"));
+        const rb_eval = get_range_evaluation(result["resource_balance"]);
+        resource_balance.html(rb_eval);
+        resource_balance.css("width", rb_eval.concat("%"));
+        const ob_eval = get_range_evaluation(result["obstacle"]);
+        obstalce.html(ob_eval);
+        obstalce.css("width", ob_eval.concat("%"));
+        const ac_eval = get_range_evaluation(result["area_control"]);
+        area_control.html(ac_eval);
+        area_control.css("width", ac_eval.concat("%"));
+    }
+
+    function get_range_evaluation(val, range) {
+        const min_possible = range[0];
+        const max_possible = range[1];
+        const min_optimal = range[2];
+        const max_optimal = range[3];
+        const left = min_optimal - min_possible;
+        const right = max_possible - max_optimal;
+        const distance = max(left, right);
+        let evaluation = 0;
+        if (val <= max_optimal && val >= min_optimal)
+            evaluation = 100;
+        else if (val < min_optimal)
+            evaluation = (min_optimal - val) / distance * 100;
+        else if (val > max_optimal)
+            evaluation = (val - max_optimal) / distance * 100;
+
+        return evaluation
     }
 
 </script>

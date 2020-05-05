@@ -266,8 +266,8 @@
         for(var key in range) {
             let tmp = $("#" + key + "_" + index);
             const eval = get_range_evaluation(result[key], range[key]);
-            tmp.html(eval);
-            tmp.css("width", eval + "%");
+            tmp.html(eval + "(" + result[key] + ")");
+            tmp.css("width", eval);
         }
         {#var base_distance = $("#base_distance_" + index);#}
         {#var resource_count = $("#resource_count_" + index);#}
@@ -311,7 +311,7 @@
         else if (val > max_optimal)
             evaluation = (distance - (val - max_optimal)) / distance * 100;
 
-        return evaluation.toFixed(1)
+        return evaluation.toFixed(1).toString() + "%"
     }
 
 </script>

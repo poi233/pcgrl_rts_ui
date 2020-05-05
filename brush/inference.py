@@ -175,7 +175,7 @@ def get_range_eval(val, input_pack):
 def createMap(size, fixed_tiles):
     initial_map = np.zeros((size, size), dtype=int)
     for item in fixed_tiles:
-        initial_map[item[1]][item[0]] = fixed_tiles[item]
+        initial_map[item[0]][item[1]] = fixed_tiles[item]
     return initial_map
 ################################## MAIN ########################################
 # game = 'small_fair_rts'

@@ -127,7 +127,7 @@ SMALL_FAIR_NARROW = PPO2.load("static/models/small_fair_rts/narrow/model_1.pkl")
 # SMALL_FUN_TURTLE = PPO2.load("static/models/small_fun_rts/turtle/model_1.pkl")
 # SMALL_FUN_WIDE = PPO2.load("static/models/small_fun_rts/wide/model_1.pkl")
 
-# MEDIUM_FAIR_NARROW = PPO2.load("static/models/medium_fair_rts/narrow/model_1.pkl")
+MEDIUM_FAIR_NARROW = PPO2.load("static/models/medium_fair_rts/narrow/model_1.pkl")
 
 
 STATIC_URL = '/static/'

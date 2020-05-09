@@ -80,9 +80,74 @@
             <canvas width="380" height="380" id="suggest1" style="display: inline;"></canvas>
         </div>
     </div>
+        <div class="row">
+        <div class="col">
+            <h5>Origin</h5>
+        </div>
+    </div>
     <div class="row">
         <div class="col">
-            <h5>Suggest 1</h5>
+            <label>base distance</label>
+            <div class="progress">
+                <div id="base_distance_origin" class="progress-bar" role="progressbar" style="width: 0%;" aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="100">0
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <label>resource count</label>
+            <div class="progress">
+                <div id="resource_count_origin" class="progress-bar" role="progressbar" style="width: 0%;"
+                     aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="100">0
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <label>resource distance</label>
+            <div class="progress">
+                <div id="resource_distance_origin" class="progress-bar" role="progressbar" style="width: 0%;"
+                     aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="100">0
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <label>resource balance</label>
+            <div class="progress">
+                <div id="resource_balance_origin" class="progress-bar" role="progressbar" style="width: 0%;"
+                     aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="100">0
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <label>obstacle</label>
+            <div class="progress">
+                <div id="obstacle_origin" class="progress-bar" role="progressbar" style="width: 0%;" aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="100">0
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <label>area control</label>
+            <div class="progress">
+                <div id="area_control_origin" class="progress-bar" role="progressbar" style="width: 0%;" aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="100">0
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col">
+            <h5>Average Suggestion</h5>
         </div>
     </div>
     <div class="row" style="margin-bottom: 20px;">
@@ -157,7 +222,7 @@
     </div>
     <div class="row">
         <div class="col">
-            <h5>Suggest 2</h5>
+            <h5>Area Control Oriented Suggestion</h5>
         </div>
     </div>
     <div class="row">
@@ -221,7 +286,7 @@
     </div>
     <div class="row">
         <div class="col">
-            <h5>Suggest 3</h5>
+            <h5>Base Oriented Suggestion</h5>
         </div>
     </div>
     <div class="row">
@@ -285,7 +350,7 @@
     </div>
     <div class="row">
         <div class="col">
-            <h5>Suggest 4</h5>
+            <h5>Resource Oriented Suggestion</h5>
         </div>
     </div>
     <div class="row">
@@ -388,6 +453,7 @@
                 if (result === false) {
                     alert("Input invalid or timeout.")
                 }
+                reset_info('origin', result['origin'], result['range']);
                 for (let i = 0; i < sugs.length; i++) {
                     sugs[i].draw(result[i]['map']);
                     reset_info(i + 1, result[i], result["range"]);

@@ -71,8 +71,8 @@ class RTSProblem(Problem):
     def adjust_param(self, **kwargs):
         super().adjust_param(**kwargs)
 
-        self._min_resource = kwargs.get('min_resource', self._max_resource)
-        self._max_resource = kwargs.get('max_resource', self._max_resource)
+        # self._min_resource = kwargs.get('min_resource', self._max_resource)
+        # self._max_resource = kwargs.get('max_resource', self._max_resource)
         self._max_obstacles = kwargs.get('max_obstacles', self._max_obstacles)
         self._resource_distance_diff = kwargs.get("resource_distance_diff", self._resource_distance_diff)
         self._map = kwargs.get("map", None)
@@ -109,11 +109,10 @@ class RTSProblem(Problem):
             dikjstra1, _ = run_dikjstra(b1_x, b1_y, map, ["empty", "base", "resource"])
             dikjstra2, _ = run_dikjstra(b2_x, b2_y, map, ["empty", "base", "resource"])
             # calculate distance
-            map_stats["base_distance"] = self._base_distance_diff - abs(
-                self._width / 2 - max(map_stats["base_distance"], dikjstra1[b2_y][b2_x]))
+            map_stats["base_distance"] = int(self._base_distance_diff - abs(
+                self._width / 2 - max(map_stats["base_distance"], dikjstra1[b2_y][b2_x])))
             # calculate resource distance
-            if map_stats[
-                "resource_count"] >= self._min_resource:  # and map_stats["resource_count"] <= self._max_resource:
+            if self._min_resource <= map_stats["resource_count"] <= self._max_resource:  # and map_stats["resource_count"] <= self._max_resource:
                 resources = []
                 resources.extend(map_locations["resource"])
                 sum1 = 0
@@ -127,8 +126,8 @@ class RTSProblem(Problem):
                     if dikjstra2[r_y][r_x] > 0:
                         sum2 += dikjstra2[r_y][r_x]
                         dist2 = min(dist2, dikjstra2[r_y][r_x])
-                map_stats["resource_distance"] = self._resource_distance_diff - abs(dist1 - dist2)
-                map_stats["resource_balance"] = self._resource_balance_diff - abs(sum1 - sum2)
+                map_stats["resource_distance"] = int(self._resource_distance_diff - abs(dist1 - dist2))
+                map_stats["resource_balance"] = int(self._resource_balance_diff - abs(sum1 - sum2))
             # calculate area control
             base1 = 0
             base2 = 0
@@ -194,7 +193,7 @@ class RTSProblem(Problem):
 
     def get_episode_over(self, new_stats, old_stats):
         basic_rules = new_stats["base_count"] == self._target_base and \
-                      new_stats["resource_count"] >= self._min_resource and \
+                      self._min_resource <= new_stats["resource_count"] <= self._max_resource and \
                       new_stats["region"] == 1
         eval_total = new_stats["base_distance"] + new_stats["resource_distance"] + new_stats["resource_balance"] + \
                      new_stats["area_control"]

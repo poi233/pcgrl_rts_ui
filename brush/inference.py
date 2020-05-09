@@ -20,6 +20,7 @@ def infer(game, representation, model_path, **kwargs):
     env_name = '{}-{}-v0'.format(game, representation)
     env_names = list()
     model_paths = list()
+    model_paths.append(model_path)
     if "small" in game:
         model.FullyConvPolicy = model.FullyConvPolicySmallMap
         kwargs['cropped_size'] = 8
@@ -39,8 +40,8 @@ def infer(game, representation, model_path, **kwargs):
         model_paths.append(("base_medium_%s" % representation).upper())
         model_paths.append(("resource_medium_%s" % representation).upper())
     env_names = ['{}-{}-v0'.format(game, representation) for game in env_names]
-    env_names.append(env_name)
-    model_paths.append(model_path)
+    env_names.insert(0, env_name)
+
     kwargs['render'] = False
     # agent = PPO2.load(model_path)
     # agent = getattr(settings, model_path, None)

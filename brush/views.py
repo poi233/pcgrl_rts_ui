@@ -39,7 +39,7 @@ def suggest(request):
         res[i] = {}
         res[i]['map'] = [[int(np.argmax(item)) for item in row] for row in sug_info[i]["info"]["terminal_observation"]]
         res[i]['base_count'] = sug_info[i]["info"]["base_count"]
-        res[i]['base_distance'] = int(sug_info[i]["info"]["base_distance"])
+        res[i]['base_distance'] = sug_info[i]["info"]["base_distance"]
         res[i]['resource_count'] = sug_info[i]["info"]["resource_count"]
         res[i]['resource_distance'] = sug_info[i]["info"]["resource_distance"]
         res[i]['resource_balance'] = sug_info[i]["info"]["resource_balance"]

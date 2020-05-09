@@ -4,6 +4,15 @@ from gym_pcgrl.envs.probs import RTSProblem
 class ResourceSmallRTSProblem(RTSProblem):
     def __init__(self):
         super().__init__()
+        self._width = 8
+        self._height = 8
+        self._min_resource = self._width / 8
+        self._max_resource = self._width
+        self._max_obstacles = self._width / 2 * 3
+        self._resource_distance_diff = 1
+        self._resource_balance_diff = self._width / 4
+        self._area_control_diff = self._width / 4 * 2
+        self._base_distance_diff = self._width * 3 / 8
 
         self._rewards = {
             "base_count": 10,

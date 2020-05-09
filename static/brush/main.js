@@ -200,11 +200,17 @@ run.prototype.drawBgBox = function (x, y, z) {
 let canvas = document.querySelector("#canvas");
 let suggest1 = document.querySelector("#suggest1");
 let suggest2 = document.querySelector("#suggest2");
+let suggest3 = document.querySelector("#suggest3");
+let suggest4 = document.querySelector("#suggest4");
+
 // let cvs = canvas.getContext("2d");
 let a = new run(canvas, {}, true);
 let sugs = [];
 sugs.push(new run(suggest1, {}, false));
 sugs.push(new run(suggest2, {}, false));
+sugs.push(new run(suggest3, {}, false));
+sugs.push(new run(suggest4, {}, false));
+
 
 function reset_suggestion(sugs, changeSize, size) {
     for (let i = 0; i < sugs.length; i++) {

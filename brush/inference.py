@@ -9,6 +9,7 @@ import random
 
 import model
 from utils import make_vec_envs
+from gym_pcgrl.envs.probs.rts_prob import RTSProblem
 
 
 def infer(game, representation, model_path, **kwargs):
@@ -17,39 +18,56 @@ def infer(game, representation, model_path, **kwargs):
      - infer_kwargs: Args to pass to the environment.
     """
     env_name = '{}-{}-v0'.format(game, representation)
+    env_names = list()
+    model_paths = list()
     if "small" in game:
         model.FullyConvPolicy = model.FullyConvPolicySmallMap
         kwargs['cropped_size'] = 8
+        env_names.append("area_control_small_rts")
+        env_names.append("base_small_rts")
+        env_names.append("resource_small_rts")
+        model_paths.append(("area_control_small_%s" % representation).upper())
+        model_paths.append(("base_small_%s" % representation).upper())
+        model_paths.append(("resource_small_%s" % representation).upper())
     elif "medium" in game:
         model.FullyConvPolicy = model.FullyConvPolicySmallMap
         kwargs['cropped_size'] = 12
-    elif "large" in game:
-        model.FullyConvPolicy = model.FullyConvPolicyBigMap
-        kwargs['cropped_size'] = 16
-
+        env_names.append("area_control_medium_rts")
+        env_names.append("base_medium_rts")
+        env_names.append("resource_medium_rts")
+        model_paths.append(("area_control_medium_%s" % representation).upper())
+        model_paths.append(("base_medium_%s" % representation).upper())
+        model_paths.append(("resource_medium_%s" % representation).upper())
+    env_names = ['{}-{}-v0'.format(game, representation) for game in env_names]
+    env_names.append(env_name)
+    model_paths.append(model_path)
     kwargs['render'] = False
     # agent = PPO2.load(model_path)
-    agent = getattr(settings, model_path, None)
+    # agent = getattr(settings, model_path, None)
     fixed_tiles = process(kwargs.get('tiles', []))
     initial_map = createMap(kwargs['cropped_size'], fixed_tiles)
     kwargs['old_map'] = initial_map
     change_limit = kwargs.get('change_limit', 5000)
-    # if not canCreateMap(fixed_tiles, game.split("_")[0], game.split("_")[1]):
-    #     return False
     sug_info = {}
-    for i in range(kwargs.get('trials', 1)):
+    sug_info["origin"] = None
+
+
+    for i in range(4):
+        agent = getattr(settings, model_paths[i], None)
         sug_info[i] = {}
-        env = make_vec_envs(env_name, representation, None, 1, **kwargs)
+        env = make_vec_envs(env_names[i], representation, None, 1, **kwargs)
         info = None
         obs = env.reset()
         dones = False
         cur_pos = {'x': None, 'y': None}
         while not dones:
-            if i == 0:
-                action, _ = agent.predict(obs)
-                obs, _, dones, info = env.step(action)
-            else:
-                obs, _, dones, info = step(cur_pos, fixed_tiles, representation, env, agent, obs)
+            # if i == 0:
+            #     action, _ = agent.predict(obs)
+            #     obs, _, dones, info = env.step(action)
+            # else:
+            obs, _, dones, info = step(cur_pos, fixed_tiles, representation, env, agent, obs)
+            if sug_info["origin"] is None:
+                sug_info["origin"] = info[0]['old_stats']
             cur_pos['x'] = info[0]['pos'][0]
             cur_pos['y'] = info[0]['pos'][1]
             if kwargs.get('verbose', False):

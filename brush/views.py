@@ -35,7 +35,7 @@ def suggest(request):
     if not sug_info:
         return JsonResponse(False, safe=False)
     res = {}
-    for i in range(len(sug_info) - 1):
+    for i in range(4):
         res[i] = {}
         res[i]['map'] = [[int(np.argmax(item)) for item in row] for row in sug_info[i]["info"]["terminal_observation"]]
         res[i]['base_count'] = sug_info[i]["info"]["base_count"]
@@ -47,6 +47,7 @@ def suggest(request):
         res[i]['region'] = sug_info[i]["info"]["region"]
         res[i]['area_control'] = sug_info[i]["info"]["area_control"]
     res["range"] = sug_info["range"]
+    res["origin"] = sug_info["origin"]
     for item in res:
         print(res[item])
         print("--------------------------------")

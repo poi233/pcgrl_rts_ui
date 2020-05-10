@@ -4,10 +4,8 @@ html,body{
 }
 
 .main{
-    width: 1500px;
     margin: 20px auto;
 }
-canvas{
-    margin: 0;
-    padding: 0;
-}
+
+
+

@@ -4,7 +4,7 @@ function run(canvas, obj, canClick) {
     this.cvs = canvas.getContext("2d");
     this.bgColor = obj.bgColor || "#e8e8e8";
     this.clickedColor = obj.clickedColor || "#ff0000";
-    this.boxSize = obj.boxSize || 30;
+    this.boxSize = obj.boxSize || 15;
     this.bgWidthLength = 8;
     this.bgHeightLength = 8;
     this.clickedArr = [];

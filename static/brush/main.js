@@ -187,7 +187,6 @@ run.prototype.drawBg = function () {
 };
 
 run.prototype.drawBgBox = function (x, y, z) {
-
     this.cvs.beginPath();
     this.cvs.fillStyle = z ? this.clickedColor : this.bgColor;
     this.cvs.fillRect(x + 1, y + 1, this.boxSize - 1, this.boxSize - 1);
@@ -204,7 +203,7 @@ let suggest3 = document.querySelector("#suggest3");
 let suggest4 = document.querySelector("#suggest4");
 
 // let cvs = canvas.getContext("2d");
-let a = new run(canvas, {}, true);
+let a = new run(canvas, {boxSize: 30}, true);
 let sugs = [];
 sugs.push(new run(suggest1, {}, false));
 sugs.push(new run(suggest2, {}, false));
@@ -238,11 +237,6 @@ $('#small').on('click', function () {
 $('#medium').on('click', function () {
     reset_canvas(a, 12);
     reset_suggestion(sugs, true, 12);
-});
-
-$('#large').on('click', function () {
-    reset_canvas(a, 16);
-    reset_suggestion(sugs, true, 16);
 });
 
 $("#base").on('click', function () {

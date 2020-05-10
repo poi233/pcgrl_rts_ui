@@ -1,11 +1,11 @@
 from gym_pcgrl.envs.probs import RTSProblem
 
 
-class ResourceSmallRTSProblem(RTSProblem):
+class ResourceMediumRTSProblem(RTSProblem):
     def __init__(self):
         super().__init__()
-        self._width = 8
-        self._height = 8
+        self._width = 12
+        self._height = 12
         self._min_resource = self._width / 8
         self._max_resource = self._width
         self._max_obstacles = self._width / 2 * 3

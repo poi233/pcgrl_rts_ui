@@ -6,6 +6,7 @@ class AreaControlMediumRTSProblem(RTSProblem):
         super().__init__()
         self._width = 12
         self._height = 12
+        self._prob = {"empty": 0.9, "base": 0.01, "resource": 0.03, "obstacle": 0.06}
         self._min_resource = self._width / 8
         self._max_resource = self._width
         self._max_obstacles = self._width / 2 * 3
@@ -29,6 +30,6 @@ class AreaControlMediumRTSProblem(RTSProblem):
         basic_rules = new_stats["base_count"] == self._target_base and \
                       self._min_resource <= new_stats["resource_count"] <= self._max_resource and \
                       new_stats["region"] == 1
-        optional_rules = new_stats["area_control"] > self._area_control_diff - 2
+        optional_rules = new_stats["area_control"] > -self._area_control_diff
         return basic_rules and optional_rules
 

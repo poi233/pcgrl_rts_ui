@@ -98,7 +98,7 @@ run.prototype.draw = function (initMap) {
     for (let i = 0; i < initMap.length; i++) {
         for (let j = 0; j < initMap[0].length; j++) {
             if (initMap[i][j] !== 0) {
-                let item = initMap[i][j]
+                let item = initMap[i][j];
                 if (item === 1) {
                     this.changeClickColor("#00ff00")
                 } else if (item === 2) {
@@ -106,6 +106,7 @@ run.prototype.draw = function (initMap) {
                 } else if (item === 3) {
                     this.changeClickColor("#ff0000")
                 }
+                this.clickedArr.push({"point": {x: i, y: j}, "type": item});
                 this.drawBgBox(i * this.boxSize, j * this.boxSize, true);
             }
         }

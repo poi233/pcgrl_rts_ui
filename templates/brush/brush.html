@@ -41,28 +41,6 @@
                         <label class="btn btn-secondary">
                             <input type="radio" name="size" id="medium" value="medium"> Medium
                         </label>
-                        {#                    <label class="btn btn-secondary">#}
-                        {#                        <input type="radio" name="size" id="large" value="large"> Large#}
-                        {#                    </label>#}
-                    </div>
-                    <div id="style-selector" class="btn-group btn-group-toggle" data-toggle="buttons">
-                        <label class="btn btn-secondary active">
-                            <input type="radio" name="style" id="fair" value="fair" checked="checked"> Fair
-                        </label>
-                        <label class="btn btn-secondary">
-                            <input type="radio" name="style" id="fun" value="fun"> Fun
-                        </label>
-                    </div>
-                    <div id="rep-selector" class="btn-group btn-group-toggle" data-toggle="buttons">
-                        <label class="btn btn-secondary active">
-                            <input type="radio" name="rep" id="narrow" value="narrow" checked="checked"> Narrow
-                        </label>
-                        <label class="btn btn-secondary">
-                            <input type="radio" name="rep" id="turtle" value="turtle"> Turtle
-                        </label>
-                        {#                    <label class="btn btn-secondary">#}
-                        {#                        <input type="radio" name="rep" id="wide" value="wide"> Wide#}
-                        {#                    </label>#}
                     </div>
                     <button class="btn btn-primary" id="clean">Clean</button>
                     <button class="btn btn-success" id="suggestion">Suggestion</button>
@@ -83,18 +61,18 @@
         <div class="col-6">
             <div class="row">
                 <div class="col-6">
-                    <canvas height="190" width="190" id="suggest1" style="display: inline;"></canvas>
+                    <canvas height="190" width="190" id="suggest1" style="display: inline;" onclick="apply(0)"></canvas>
                 </div>
                 <div class="col-6">
-                    <canvas height="190" width="190" id="suggest2" style="display: inline;"></canvas>
+                    <canvas height="190" width="190" id="suggest2" style="display: inline;" onclick="apply(1)"></canvas>
                 </div>
             </div>
             <div class="row">
                 <div class="col-6">
-                    <canvas height="190" width="190" id="suggest3" style="display: inline;"></canvas>
+                    <canvas height="190" width="190" id="suggest3" style="display: inline;" onclick="apply(2)"></canvas>
                 </div>
                 <div class="col-6">
-                    <canvas height="190" width="190" id="suggest4" style="display: inline;"></canvas>
+                    <canvas height="190" width="190" id="suggest4" style="display: inline;" onclick="apply(3)"></canvas>
                 </div>
             </div>
         </div>
@@ -436,8 +414,8 @@
 
     $("#suggestion").on('click', function () {
         var size = $("input[name='size']:checked").val();
-        var style = $("input[name='style']:checked").val();
-        var rep = $("input[name='rep']:checked").val();
+        var style = "fair";
+        var rep = "narrow";
         var tiles = a.showRes();
         var data = {"size": size, "style": style, "tiles": tiles, "rep": rep};
         $("#loading-spin").css("visibility", "visible");
@@ -470,33 +448,9 @@
         for (var key in range) {
             let tmp = $("#" + key + "_" + index);
             const eval = get_range_evaluation(result[key], range[key]);
-            tmp.html(eval + "(" + result[key] + ")");
+            tmp.html(eval + "(" + result['origin'][key] + ")");
             tmp.css("width", eval);
         }
-        {#var base_distance = $("#base_distance_" + index);#}
-        {#var resource_count = $("#resource_count_" + index);#}
-        {#var resource_distance = $("#resource_distance_" + index);#}
-        {#var resource_balance = $("#resource_balance_" + index);#}
-        {#var obstalce = $("#obstacle_" + index);#}
-        {#var area_control = $("#area_control_" + index);#}
-        {#const bd_eval = get_range_evaluation(result["base_distance"], range["base_distance"]);#}
-        {#base_distance.html(bd_eval);#}
-        {#base_distance.css("width", bd_eval + "%");#}
-        {#const rc_eval = get_range_evaluation(result["resource_count"], range["resource_count"]);#}
-        {#resource_count.html(rc_eval);#}
-        {#resource_count.css("width", rc_eval + "%");#}
-        {#const rd_eval = get_range_evaluation(result["resource_distance"], range["resource_distance"]);#}
-        {#resource_distance.html(rd_eval);#}
-        {#resource_distance.css("width", rd_eval + "%");#}
-        {#const rb_eval = get_range_evaluation(result["resource_balance"], range["resource_balance"]);#}
-        {#resource_balance.html(rb_eval);#}
-        {#resource_balance.css("width", rb_eval + "%");#}
-        {#const ob_eval = get_range_evaluation(result["obstacle"], range["obstacle"]);#}
-        {#obstalce.html(ob_eval);#}
-        {#obstalce.css("width", ob_eval + "%");#}
-        {#const ac_eval = get_range_evaluation(result["area_control"], range["area_control"]);#}
-        {#area_control.html(ac_eval);#}
-        {#area_control.css("width", ac_eval + "%");#}
     }
 
     function get_range_evaluation(val, range) {
@@ -516,6 +470,23 @@
             evaluation = (distance - (val - max_optimal)) / distance * 100;
 
         return evaluation.toFixed(1).toString() + "%"
+    }
+
+    function apply(index) {
+        if (confirm("Apply suggest" + index + " ?")) {
+            a.clean();
+            var tmp_map = [];
+            for (var i = 0; i < a.bgWidthLength; i++) {
+                tmp_map.push([]);
+                for (var j = 0; j < a.bgWidthLength; j++) {
+                    tmp_map[i].push(0);
+                }
+            }
+            sugs[index].clickedArr.forEach(function (o, index) {
+                tmp_map[o["point"].x][o["point"].y] = o["type"];
+            });
+            a.draw(tmp_map);
+        }
     }
 
 </script>

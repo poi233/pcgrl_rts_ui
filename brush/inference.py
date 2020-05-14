@@ -48,10 +48,9 @@ def infer(game, representation, model_path, **kwargs):
     fixed_tiles = process(kwargs.get('tiles', []))
     initial_map = createMap(kwargs['cropped_size'], fixed_tiles)
     kwargs['old_map'] = initial_map
-    change_limit = kwargs.get('change_limit', 5000)
+    change_limit = kwargs.get('change_limit', 10000)
     sug_info = {}
     sug_info["origin"] = None
-
 
     for i in range(4):
         agent = getattr(settings, model_paths[i], None)
@@ -75,10 +74,11 @@ def infer(game, representation, model_path, **kwargs):
                 print(info[0])
             if dones:
                 break
-            # if info[0]['changes'] > change_limit:
-            #     return False
+            if info[0]['changes'] > change_limit:
+                return False
         sug_info[i]["info"] = info[0]
     sug_info["range"] = get_range(game.split("_")[0], game.split("_")[1])
+    sug_info["origin"]["map"] = initial_map
     return sug_info
 
 
@@ -161,10 +161,6 @@ def get_range(size, style):
         width = 8
     else:
         width = 12
-    if style == "fair":
-        times = 1
-    else:
-        times = 2
     tmp = dict()
     # values of indexes: 0-min possible value, 1-max possible value, 2-min optimal value, 3-max optimal value
     tmp["base_distance"] = [width * 3 / 8 - width * 2 + width / 2, width * 3 / 8, 0, width * 3 / 8]

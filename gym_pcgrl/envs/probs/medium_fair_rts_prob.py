@@ -34,6 +34,6 @@ class MediumFairRTSProblem(RTSProblem):
                       new_stats["region"] == 1
         eval_total = new_stats["base_distance"] + new_stats["resource_distance"] + new_stats["resource_balance"] + \
                      new_stats["area_control"]
-        optional_rules = eval_total > -25
+        optional_rules = eval_total > -10
         return basic_rules and optional_rules
 

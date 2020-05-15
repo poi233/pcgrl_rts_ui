@@ -30,6 +30,6 @@ class AreaControlMediumRTSProblem(RTSProblem):
         basic_rules = new_stats["base_count"] == self._target_base and \
                       self._min_resource <= new_stats["resource_count"] <= self._max_resource and \
                       new_stats["region"] == 1
-        optional_rules = new_stats["area_control"] > -self._area_control_diff
+        optional_rules = new_stats["area_control"] > 0
         return basic_rules and optional_rules
 

@@ -18,6 +18,30 @@
     <link rel="stylesheet" href="{% static 'brush/style.css' %}">
 </head>
 <body>
+<div style="float: left; margin: 50px 10px">
+    <ul class="list-group">
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+            Total Suggestions
+            <span class="badge badge-primary badge-pill" id="total_sug_count">0</span>
+        </li>
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+            Average
+            <span class="badge badge-primary badge-pill" id="sug_count_0">0</span>
+        </li>
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+            Area Control Oriented
+            <span class="badge badge-primary badge-pill" id="sug_count_1">0</span>
+        </li>
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+            Base Oriented
+            <span class="badge badge-primary badge-pill" id="sug_count_2">0</span>
+        </li>
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+            Resource Oriented
+            <span class="badge badge-primary badge-pill" id="sug_count_3">0</span>
+        </li>
+    </ul>
+</div>
 <header>
     <div class="container">
         <div class="main row">
@@ -54,6 +78,7 @@
     </div>
 </header>
 <div class="container">
+
     <div class="row">
         <div class="col-6">
             <canvas height="380" width="380" id="canvas" style="display: inline;"></canvas>
@@ -428,6 +453,7 @@
             success: function (result) {
                 result = JSON.parse(result);
                 $("#loading-spin").css("visibility", "hidden");
+                $("#total_sug_count").html(parseInt($("#total_sug_count").html()) + 1);
                 if (result === false) {
                     alert("Input invalid or timeout.")
                 }
@@ -486,6 +512,8 @@
                 tmp_map[o["point"].x][o["point"].y] = o["type"];
             });
             a.draw(tmp_map);
+            let count = $("#sug_count_" + index);
+            count.html(parseInt(count.html()) + 1);
         }
     }
 

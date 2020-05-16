@@ -77,6 +77,7 @@ def infer(game, representation, model_path, **kwargs):
             if info[0]['changes'] > change_limit:
                 return False
         sug_info[i]["info"] = info[0]
+        print("model %s complete" % i)
     sug_info["range"] = get_range(game.split("_")[0], game.split("_")[1])
     sug_info["origin"]["map"] = initial_map
     return sug_info

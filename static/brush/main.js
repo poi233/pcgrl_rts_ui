@@ -95,6 +95,7 @@ run.prototype.toggleClick = function (o, draw) {
 };
 
 run.prototype.draw = function (initMap) {
+    let prev = this.clickedColor;
     for (let i = 0; i < initMap.length; i++) {
         for (let j = 0; j < initMap[0].length; j++) {
             if (initMap[i][j] !== 0) {
@@ -111,6 +112,7 @@ run.prototype.draw = function (initMap) {
             }
         }
     }
+    this.clickedColor = prev;
 };
 
 run.prototype.Random = function (length) {

@@ -28,7 +28,7 @@ def suggest(request):
         'change_limit': 5000,
         'change_percentage': 0.4,
         'trials': 2,
-        'verbose': True,
+        'verbose': False,
         'tiles': tiles,
         'random_start': False
     }

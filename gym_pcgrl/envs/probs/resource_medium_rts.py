@@ -31,7 +31,7 @@ class ResourceMediumRTSProblem(RTSProblem):
         basic_rules = new_stats["base_count"] == self._target_base and \
                       self._min_resource <= new_stats["resource_count"] <= self._max_resource and \
                       new_stats["region"] == 1
-        optional_rules = new_stats["resource_distance"] >= 0 and \
-                         new_stats["resource_balance"] >= 0
+        optional_rules = new_stats["resource_distance"] >= -self._resource_distance_diff and \
+                         new_stats["resource_balance"] >= -self._resource_balance_diff
         return basic_rules and optional_rules
 
